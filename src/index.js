@@ -18,6 +18,7 @@ const init = async () => {
 
   let inProgress = true;
 
+  // loop through questions while progress is true
   while (inProgress) {
     const question = {
       name: "action",
@@ -30,32 +31,13 @@ const init = async () => {
           name: "View All Employees",
         },
         {
-          short: "Employees By Manager",
-          value: "viewEmployeesByManager",
-          name: "View Employees By Manager",
-        },
-        {
-          short: "Employees By Role",
-          value: "viewAllEmployeesByRole",
-          name: "View All Employees By Role",
-        },
-        {
           short: "Add Employee",
           value: "addEmployee",
           name: "Add an Employee",
         },
         {
-          short: "Remove Employee",
-          value: "removeEmployee",
-          name: "Remove an Employee",
-        },
-        {
           value: "updateEmployeeRole",
-          name: "Update Employee Role",
-        },
-        {
-          value: "updateEmployeeManager",
-          name: "Update Employee Manager",
+          name: "Update an Employee Role",
         },
         {
           short: "Roles",
@@ -67,10 +49,6 @@ const init = async () => {
           name: "Add Role",
         },
         {
-          value: "removeRole",
-          name: "Remove Role",
-        },
-        {
           short: "Departments",
           value: "viewAllDepartments",
           name: "View All Departments",
@@ -78,18 +56,6 @@ const init = async () => {
         {
           value: "addDepartment",
           name: "Add Departments",
-        },
-        {
-          value: "removeDepartment",
-          name: "Remove Departments",
-        },
-        {
-          value: "viewAllDepartmentsBudgets",
-          name: "View All Departments Budgets",
-        },
-        {
-          value: "viewDepartmentsBudgetsById",
-          name: "View Departments Budgets By Id",
         },
         {
           short: "Exit",
