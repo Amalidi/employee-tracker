@@ -64,6 +64,67 @@ const init = async () => {
         },
       ],
     };
+
+    // prompt choice questions
+    const answers = await inquirer.prompt(question);
+
+    if (answers.action === "exit") {
+      inProgress = false;
+    } else {
+      if (answers.action === "viewAllEmployees") {
+        const query = "SELECT * FROM employee";
+        const data = await db.query(query);
+        console.table(data);
+      }
+
+      if (answers.action === "addEmployee") {
+        const roleQuery = "SELECT * FROM role";
+        const allRoles = await db.query(roleQuery);
+
+        // function to allow users to select any role
+        const generateChoices = (roles) => {
+          return roles.map((role) => {
+            return {
+              short: role.id,
+              name: role.title,
+              value: role.id,
+            };
+          });
+        };
+
+        // prompt add employee questions
+        const addNewEmployee = [
+          {
+            type: "input",
+            name: "first_name",
+            message: "Enter employee first name?",
+          },
+          {
+            type: "input",
+            name: "last_name",
+            message: "Please enter employee last name?",
+          },
+          {
+            type: "list",
+            name: "role_id",
+            message: "Please enter the employee role?",
+            choices: generateChoices(allRoles),
+          },
+        ];
+        const answers = await inquirer.prompt(addNewEmployee);
+        const query = `INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answers.first_name}', '${answers.last_name}', '${answers.role_id}');`;
+        const data = await db.query(query);
+        console.log("Employee has been added successfully");
+      }
+
+      // add the view roles
+      if (answers.action === "viewAllRoles") {
+        // execute query for SELECT * FROM roles table
+        const query = "SELECT * FROM role";
+        const data = await db.query(query);
+        console.table(data);
+      }
+    }
   }
 };
 init();
