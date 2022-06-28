@@ -18,7 +18,7 @@ const init = async () => {
 
   let inProgress = true;
 
-  // loop through questions while progress is true
+    // loop through questions while progress is true
   while (inProgress) {
     const question = {
       name: "action",
@@ -81,7 +81,7 @@ const init = async () => {
         const roleQuery = "SELECT * FROM role";
         const allRoles = await db.query(roleQuery);
 
-        // function to allow users to select any role
+        // function to allow users to select any role 
         const generateChoices = (roles) => {
           return roles.map((role) => {
             return {
@@ -117,14 +117,51 @@ const init = async () => {
         console.log("Employee has been added successfully");
       }
 
-      // add the view roles
+      if (answers.action === "updateEmployeeRole") {
+        const allEmployees = "SELECT * FROM employee";
+        // query data 
+        const empData = await db.query(allEmployees);
+        console.table(empData);
+
+        // prompt update questions
+        const updateEmployeeRole = [
+          {
+            type: "input",
+            name: "role",
+            message: "Please select the employee you would like to update?",
+          },
+          {
+            type: "input",
+            name: "id",
+            message: "Please input new role id for employee?",
+          },
+        ];
+
+        // prompted on the terminal
+        const chosenRole = await inquirer.prompt(updateEmployeeRole);
+
+        // execute query for update selected employee role
+        const query = `UPDATE employee SET role_id = ('${chosenRole.role}') WHERE ID = ('${chosenRole.id}');`;
+        const data = await db.query(query);
+
+        // execute query for update selected employee role
+        const reselect = "SELECT * FROM employee";
+        const newData = await db.query(reselect);
+        console.table(newData);
+
+        console.log("Employee role has been successfully updated");
+      }
+
+      // a selection of all the roles
       if (answers.action === "viewAllRoles") {
-        // execute query for SELECT * FROM roles table
+        
+         // execute query for SELECT * FROM roles table
         const query = "SELECT * FROM role";
         const data = await db.query(query);
         console.table(data);
       }
-    }
+      
+
   }
 };
 init();
