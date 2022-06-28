@@ -68,7 +68,7 @@ const addRole = [
   },
 ];
 
-const employee = [
+const addEmployee = [
   {
     type: "input",
     name: "employeeName",
@@ -106,6 +106,6 @@ module.exports = {
   actionQuestions,
   addDepartment,
   addRole,
-  employee,
+  addEmployee,
   updateEmployeeRole,
 };
