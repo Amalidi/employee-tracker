@@ -1,111 +1,86 @@
 //create start question
-const actionQuestions = [
+const question = [
   {
+    name: "action",
     type: "list",
     message: "What would you like to do?",
-    name: "chosenAction",
     choices: [
       {
-        value: "viewDepartments",
-        name: "View all departments",
+        short: "Employees",
+        value: "viewAllEmployees",
+        name: "View All Employees",
       },
       {
-        value: "viewRoles",
-        name: "View all roles",
-      },
-      {
-        value: "viewEmployees",
-        name: "View all employees",
-      },
-      {
-        value: "addDepartment",
-        name: "Add a new department",
-      },
-      {
-        value: "addRole",
-        name: "Add a new role",
-      },
-      {
+        short: "Add Employee",
         value: "addEmployee",
-        name: "Add a new employee",
+        name: "Add an Employee",
       },
       {
         value: "updateEmployeeRole",
-        name: "Update an employee role",
+        name: "Update an Employee Role",
       },
       {
-        value: "exitApp",
-        name: "Exit application",
+        short: "Roles",
+        value: "viewAllRoles",
+        name: "View All Roles",
+      },
+      {
+        value: "addRole",
+        name: "Add Role",
+      },
+      {
+        short: "Departments",
+        value: "viewAllDepartments",
+        name: "View All Departments",
+      },
+      {
+        value: "addDepartment",
+        name: "Add Departments",
+      },
+      {
+        short: "Exit",
+        value: "exit",
+        name: "Exit",
       },
     ],
   },
 ];
 
-// questions to add a department
-const addDepartment = {
-  type: "input",
-  name: "departmentName",
-  message: "What is the name of the department?",
-};
-
 //questions to add role
 const addRole = [
   {
     type: "input",
-    name: "newRole",
-    message: "What is the name of the role?",
+    name: "title",
+    message: "Please input a title for new role?",
+  },
+  {
+    type: "number",
+    name: "salary",
+    message: "Please set the salary for this role?",
   },
   {
     type: "input",
-    name: "roleSalary",
-    message: "What is the salary of the role?",
-  },
-  {
-    type: "list",
-    name: "departmentType",
-    message: "Which department does the role belong to?",
-    choices: generateDepartmentList,
+    name: "department_id",
+    message: "Please set the department id?",
   },
 ];
 
-const addEmployee = [
-  {
-    type: "input",
-    name: "employeeName",
-    message: "Enter employee first name?",
-  },
-  {
-    type: "input",
-    name: "employeeLastName",
-    message: "Please enter employee last name?",
-  },
-  {
-    type: "input",
-    name: "employeeRole",
-    message: "Please enter the employee role?",
-  },
-];
-
+// update role questions
 const updateEmployeeRole = [
   {
     type: "input",
-    name: "employeeName",
-    message: "Please select the employee you were like to update?",
-    choices: generateEmployeeList,
+    name: "role",
+    message: "Please select the employee you would like to update?",
   },
-
   {
     type: "input",
-    name: "employeeName",
-    message: "Please select the role you want to update for the employee?",
-    choices: generateRolesList,
+    name: "id",
+    message: "Please input new role id for employee?",
   },
 ];
 
 module.exports = {
-  actionQuestions,
-  addDepartment,
+  question,
   addRole,
-  addEmployee,
   updateEmployeeRole,
 };
