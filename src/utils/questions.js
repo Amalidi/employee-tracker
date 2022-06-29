@@ -53,30 +53,52 @@ const addDepartment = {
   message: "What is the name of the department?",
 };
 
+const generateRoleChoices = (roles) => {
+  return roles.map((role) => {
+    return {
+      name: role.title,
+      value: role.id,
+      short: role.title,
+    };
+  });
+};
+
+const generateManagersChoices = (managers) => {
+  return managers.map((manager) => {
+    return {
+      name: `${manager.first_name} ${manager.last_name}`,
+      value: manager.id,
+      short: `${manager.first_name} ${manager.last_name}`,
+    };
+  });
+};
+
 // prompt the questions to add employee
-const addNewEmployee = [
-  {
-    type: "input",
-    name: "first_name",
-    message: "Enter employee first name?",
-  },
-  {
-    type: "input",
-    name: "last_name",
-    message: "Please enter employee last name?",
-  },
-  {
-    type: "list",
-    name: "role_id",
-    message: "Please enter the employee role?",
-    choices: generateroleChoices,
-  },
-  {
-    type: "list",
-    name: "manager_id",
-    choices: generateManagersChoices,
-  },
-];
+const generateEmployeeQuestions = (roles, employees) => {
+  return [
+    {
+      type: "input",
+      name: "first_name",
+      message: "Enter employee first name?",
+    },
+    {
+      type: "input",
+      name: "last_name",
+      message: "Please enter employee last name?",
+    },
+    {
+      type: "list",
+      name: "role_id",
+      message: "Please enter the employee role?",
+      choices: generateRoleChoices(roles),
+    },
+    {
+      type: "list",
+      name: "manager_id",
+      choices: generateManagersChoices(employees),
+    },
+  ];
+};
 
 //questions to add role
 const addRole = [
@@ -116,5 +138,5 @@ module.exports = {
   addRole,
   updateEmployeeRole,
   addDepartment,
-  addNewEmployee,
+  generateEmployeeQuestions,
 };

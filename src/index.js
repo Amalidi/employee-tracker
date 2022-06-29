@@ -9,7 +9,7 @@ const {
   addRole,
   updateEmployeeRole,
   addDepartment,
-  addNewEmployee,
+  generateEmployeeQuestions,
 } = require("./utils/questions");
 
 //initialize app
@@ -42,12 +42,14 @@ const init = async () => {
         const roleQuery = "SELECT * FROM role";
         const allRoles = await db.query(roleQuery);
 
+        const employeeQuery = "SELECT * FROM employee";
+        const employees = await db.query(employeeQuery);
+
         // function to allow users to select any role
         const { first_name, last_name, role_id, manager_id } =
-          await inquirer.prompt(addNewEmployee);
+          await inquirer.prompt(generateEmployeeQuestions(allRoles, employees));
 
         // prompt the questions to add a new employee
-        const usersAnswers = await inquirer.prompt(addNewEmployee);
         const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${usersAnswers.first_name}', '${usersAnswers.last_name}', '${usersAnswers.role_id}', '${usersAnswers.manager_id}');`;
         const data = await db.query(query);
         console.log("Employee has been added successfully");

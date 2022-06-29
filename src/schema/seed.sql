@@ -28,9 +28,9 @@ VALUES ('Bob', 'Smith', 1, 1),
 ('Jackson', 'Hill', 2, 2),
 ('Hetty', 'feather', 3, 2),
 ('Jack', 'Taylor', 4, null),
-('Ben', 'Boxley', 5, 5),
+('Killua', 'Boxley', 5, 5),
 ('Alex', 'Marks', 6, 6),
-('Gabi', 'Ferez', 7, 6),
+('Terresa', 'Ferez', 7, 6),
 ('Rob', 'Travis', 8, 1),
 ('Valery', 'Scott', 9, 1);
 
