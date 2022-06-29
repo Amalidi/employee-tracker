@@ -116,7 +116,16 @@ const init = async () => {
         console.table(newData);
         console.log("New role has been successfully added");
       }
+
+      if (answers.action === "viewAllDepartments") {
+        const query = "SELECT * FROM department";
+
+        // execute query for SELECT * FROM departments table
+        const seeAllDepartments = await db.query(query);
+        console.table(seeAllDepartments);
+      }
     }
   }
 };
+
 init();
