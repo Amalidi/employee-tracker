@@ -53,6 +53,31 @@ const addDepartment = {
   message: "What is the name of the department?",
 };
 
+// prompt the questions to add employee
+const addNewEmployee = [
+  {
+    type: "input",
+    name: "first_name",
+    message: "Enter employee first name?",
+  },
+  {
+    type: "input",
+    name: "last_name",
+    message: "Please enter employee last name?",
+  },
+  {
+    type: "list",
+    name: "role_id",
+    message: "Please enter the employee role?",
+    choices: generateroleChoices,
+  },
+  {
+    type: "list",
+    name: "manager_id",
+    choices: generateManagersChoices,
+  },
+];
+
 //questions to add role
 const addRole = [
   {
@@ -91,4 +116,5 @@ module.exports = {
   addRole,
   updateEmployeeRole,
   addDepartment,
+  addNewEmployee,
 };

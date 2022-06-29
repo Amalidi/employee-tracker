@@ -1,5 +1,5 @@
 //npm requires
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const consoleTable = require("console.table");
 
@@ -9,10 +9,12 @@ const {
   addRole,
   updateEmployeeRole,
   addDepartment,
+  addNewEmployee,
 } = require("./utils/questions");
 
 //initialize app
 const init = async () => {
+  //
   const db = new DB("company_db");
 
   await db.start();
@@ -29,6 +31,7 @@ const init = async () => {
     if (answers.action === "exit") {
       inProgress = false;
     } else {
+      // the start
       if (answers.action === "viewAllEmployees") {
         const query = "SELECT * FROM employee";
         const data = await db.query(query);
@@ -40,41 +43,17 @@ const init = async () => {
         const allRoles = await db.query(roleQuery);
 
         // function to allow users to select any role
-        const generateChoices = (roles) => {
-          return roles.map((role) => {
-            return {
-              short: role.id,
-              name: role.title,
-              value: role.id,
-            };
-          });
-        };
+        const { first_name, last_name, role_id, manager_id } =
+          await inquirer.prompt(addNewEmployee);
 
-        // prompt the questions to add employee
-        const addNewEmployee = [
-          {
-            type: "input",
-            name: "first_name",
-            message: "Enter employee first name?",
-          },
-          {
-            type: "input",
-            name: "last_name",
-            message: "Please enter employee last name?",
-          },
-          {
-            type: "list",
-            name: "role_id",
-            message: "Please enter the employee role?",
-            choices: generateChoices(allRoles),
-          },
-        ];
-        const answers = await inquirer.prompt(addNewEmployee);
-        const query = `INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answers.first_name}', '${answers.last_name}', '${answers.role_id}');`;
+        // prompt the questions to add a new employee
+        const usersAnswers = await inquirer.prompt(addNewEmployee);
+        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${usersAnswers.first_name}', '${usersAnswers.last_name}', '${usersAnswers.role_id}', '${usersAnswers.manager_id}');`;
         const data = await db.query(query);
         console.log("Employee has been added successfully");
       }
 
+      // update employees role
       if (answers.action === "updateEmployeeRole") {
         const allEmployees = "SELECT * FROM employee";
         // query data
@@ -104,6 +83,7 @@ const init = async () => {
         console.table(data);
       }
 
+      // add a role
       if (answers.action === "addRole") {
         // query
         const getDepartments = "SELECT * FROM role";
