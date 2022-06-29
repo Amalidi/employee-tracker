@@ -4,7 +4,12 @@ const inquirer = require("inquirer");
 const consoleTable = require("console.table");
 
 // import the action questions
-const { question, addRole, updateEmployeeRole } = require("./utils/questions");
+const {
+  question,
+  addRole,
+  updateEmployeeRole,
+  addDepartment,
+} = require("./utils/questions");
 
 //initialize app
 const init = async () => {
@@ -117,12 +122,32 @@ const init = async () => {
         console.log("New role has been successfully added");
       }
 
+      // option to view all departments
       if (answers.action === "viewAllDepartments") {
         const query = "SELECT * FROM department";
 
         // execute query for SELECT * FROM departments table
         const seeAllDepartments = await db.query(query);
         console.table(seeAllDepartments);
+      }
+
+      // option to add a department
+      if (answers.action === "addDepartment") {
+        const dp = "SELECT * FROM department";
+        const newDepartment = await db.query(dp);
+        console.table(newDepartment);
+
+        // prompt the question
+        const insertQuery = await inquirer.prompt(addDepartment);
+        const query = `INSERT INTO department (name) VALUES ('${insertQuery.name}');`;
+
+        // execute query
+        const data = await db.query(query);
+        const reselect = "SELECT * FROM department";
+        const newSelection = await db.query(reselect);
+
+        console.table(newSelection);
+        console.log("New department has been successfully added");
       }
     }
   }

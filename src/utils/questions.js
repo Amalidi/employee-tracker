@@ -46,6 +46,13 @@ const question = [
   },
 ];
 
+// questions to add a department
+const addDepartment = {
+  type: "input",
+  name: "name",
+  message: "What is the name of the department?",
+};
+
 //questions to add role
 const addRole = [
   {
@@ -83,4 +90,5 @@ module.exports = {
   question,
   addRole,
   updateEmployeeRole,
+  addDepartment,
 };
