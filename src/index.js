@@ -5,7 +5,7 @@ const consoleTable = require("console.table");
 
 // import the action questions
 const {
-  question,
+  actionQuestion,
   addRole,
   updateEmployeeRole,
   addDepartment,
@@ -25,7 +25,7 @@ const init = async () => {
   // loop through questions while progress is true
   while (inProgress) {
     // prompt choice questions
-    const { answers } = await inquirer.prompt(question);
+    const { answers } = await inquirer.prompt(actionQuestion);
 
     // use if statements to prompt questions and
     if (answers.action === "exit") {
@@ -128,6 +128,13 @@ const init = async () => {
 
         console.table(newSelection);
         console.log("New department has been successfully added");
+      }
+
+      // when exit is chosen break the while loop
+      if (answers.action === "exit") {
+        inProgress = false;
+        db.stop();
+        console.log("You have successfully exited the application");
       }
     }
   }

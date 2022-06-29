@@ -1,5 +1,5 @@
 //create start question
-const question = [
+const actionQuestion = [
   {
     name: "action",
     type: "list",
@@ -112,7 +112,7 @@ const updateEmployeeRole = [
 ];
 
 module.exports = {
-  question,
+  actionQuestion,
   addRole,
   updateEmployeeRole,
   addDepartment,
