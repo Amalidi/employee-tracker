@@ -12,9 +12,17 @@ const {
   generateEmployeeQuestions,
 } = require("./utils/questions");
 
+//sql config connection
+const db = new DB({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
 //initialize app
 const init = async () => {
-  //
+  //sql config connection
   const db = new DB("company_db");
 
   await db.start();
@@ -38,6 +46,7 @@ const init = async () => {
         console.table(data);
       }
 
+      // Add an employee
       if (answers.action === "addEmployee") {
         const roleQuery = "SELECT * FROM role";
         const allRoles = await db.query(roleQuery);
