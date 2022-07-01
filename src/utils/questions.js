@@ -101,7 +101,7 @@ const generateEmployeeQuestions = (roles, employees) => {
 };
 
 //questions to add role
-const addRole = [
+const addRole = (departments) => [
   {
     type: "input",
     name: "title",
@@ -113,9 +113,10 @@ const addRole = [
     message: "Please set the salary for this role?",
   },
   {
-    type: "input",
+    type: "list",
     name: "department_id",
-    message: "Please set the department id?",
+    message: "Select department",
+    choices: departments,
   },
 ];
 

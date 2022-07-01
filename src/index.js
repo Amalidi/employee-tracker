@@ -1,7 +1,10 @@
 //npm requires
+require("dotenv").config();
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const consoleTable = require("console.table");
+
+const database = require("./utils/DB");
 
 // import the action questions
 const {
@@ -11,6 +14,7 @@ const {
   addDepartment,
   generateEmployeeQuestions,
 } = require("./utils/questions");
+const ExpandPrompt = require("inquirer/lib/prompts/expand");
 
 //initialize the app
 const init = async () => {
@@ -25,9 +29,7 @@ const init = async () => {
   };
 
   //connect to sql database
-  const dbConfig = await mysql2.createConnection(db);
-
-  await db.start();
+  const { executeQuery, closeConnection } = await database(db);
 
   //declare variable to track in progress
   let inProgress = true;
@@ -35,39 +37,47 @@ const init = async () => {
   // loop through questions while progress is true
   while (inProgress) {
     // prompt choice questions
-    const { answers } = await inquirer.prompt(actionQuestion);
+    const { action } = await inquirer.prompt(actionQuestion);
 
     // use if statements to prompt questions and
-    if (answers.action === "exit") {
+    if (action === "exit") {
       inProgress = false;
     } else {
       // the start
-      if (answers.action === "viewAllEmployees") {
+      if (action === "viewAllEmployees") {
         const query = "SELECT * FROM employee";
-        const data = await db.query(query);
+        const data = await executeQuery(query);
         console.table(data);
       }
 
       // Add an employee
-      if (answers.action === "addEmployee") {
+      if (action === "addEmployee") {
+        // query all users from db and present to user to select manager
+        // query the roles for user to select the new user role
         const roleQuery = "SELECT * FROM role";
-        const allRoles = await db.query(roleQuery);
+        const allRoles = await executeQuery(roleQuery);
 
         const employeeQuery = "SELECT * FROM employee";
-        const employees = await db.query(employeeQuery);
+        const employees = await executeQuery(employeeQuery);
+
+        const getDepartmentsList = employees.map((role) => ({
+          name: role.title,
+          value: role.id,
+          short: role.title,
+        }));
 
         // function to allow users to select any role
         const { first_name, last_name, role_id, manager_id } =
           await inquirer.prompt(generateEmployeeQuestions(allRoles, employees));
 
         // prompt the questions to add a new employee
-        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${usersAnswers.first_name}', '${usersAnswers.last_name}', '${usersAnswers.role_id}', '${usersAnswers.manager_id}');`;
-        const data = await db.query(query);
+        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${first_name}', '${last_name}', '${role_id}', '${manager_id}');`;
+        const data = await executeQuery(query);
         console.log("Employee has been added successfully");
       }
 
       // update employees role
-      if (answers.action === "updateEmployeeRole") {
+      if (action === "updateEmployeeRole") {
         const allEmployees = "SELECT * FROM employee";
         // query data
         const getEmployeeData = await db.query(allEmployees);
@@ -89,64 +99,65 @@ const init = async () => {
       }
 
       // a selection of all the roles
-      if (answers.action === "viewAllRoles") {
+      if (action === "viewAllRoles") {
         // execute query for SELECT * FROM roles table
         const query = "SELECT * FROM role";
-        const data = await db.query(query);
+        const data = await executeQuery(query);
         console.table(data);
       }
 
       // add a role
-      if (answers.action === "addRole") {
-        // query
-        const getDepartments = "SELECT * FROM role";
-        const allDepartments = await db.query(getDepartments);
-        console.table(allDepartments);
-
+      if (action === "addRole") {
         // prompt the the addrole questions from the questions js
-        const insertQuery = await inquirer.prompt(addRole);
+        // query
+        const getDepartments = "SELECT * FROM department";
+        const allDepartments = await executeQuery(getDepartments);
+        // console.table(allDepartments);
+        const getDepartmentsList = allDepartments.map((department) => ({
+          name: department.name,
+          value: department.id,
+        }));
+        const insertQuery = await inquirer.prompt(addRole(getDepartmentsList));
+
+        // console.log(insertQuery);
 
         const query = `INSERT INTO role (title, salary, department_id) VALUES ('${insertQuery.title}', '${insertQuery.salary}', '${insertQuery.department_id}');`;
-        const data = await db.query(query);
+        const data = await executeQuery(query);
 
-        const reselect = "SELECT * FROM role";
-        const newData = await db.query(reselect);
-        console.table(newData);
-        console.log("New role has been successfully added");
+        // const reselect = "SELECT * FROM role";
+        // const newData = await db.query(reselect);
+        console.table(data);
+        // console.log("New role has been successfully added");
       }
 
       // option to view all departments
-      if (answers.action === "viewAllDepartments") {
+      if (action === "viewAllDepartments") {
         const query = "SELECT * FROM department";
 
         // execute query for SELECT * FROM departments table
-        const seeAllDepartments = await db.query(query);
+        const seeAllDepartments = await executeQuery(query);
         console.table(seeAllDepartments);
       }
 
       // option to add a department
-      if (answers.action === "addDepartment") {
-        const dp = "SELECT * FROM department";
-        const newDepartment = await db.query(dp);
-        console.table(newDepartment);
+      if (action === "addDepartment") {
+        // const dp = "SELECT * FROM department";
+        // const newDepartment = await db.query(dp);
+        // console.table(newDepartment);
 
         // prompt the question
         const insertQuery = await inquirer.prompt(addDepartment);
         const query = `INSERT INTO department (name) VALUES ('${insertQuery.name}');`;
 
         // execute query
-        const data = await db.query(query);
-        const reselect = "SELECT * FROM department";
-        const newSelection = await db.query(reselect);
-
-        console.table(newSelection);
+        await executeQuery(query);
         console.log("New department has been successfully added");
       }
 
       // when exit is chosen break the while loop
-      if (answers.action === "exit") {
+      if (action === "exit") {
         inProgress = false;
-        db.stop();
+        await closeConnection();
         console.log("You have successfully exited the application");
       }
     }
