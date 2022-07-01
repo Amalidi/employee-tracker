@@ -12,18 +12,20 @@ const {
   generateEmployeeQuestions,
 } = require("./utils/questions");
 
-//sql config connection
-const db = new DB({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
-
-//initialize app
+//initialize the app
 const init = async () => {
-  //sql config connection
-  const db = new DB("company_db");
+  // const db = new DB("company_db");
+
+  //sql config start connection
+  const db = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  };
+
+  //connect to sql database
+  const dbConfig = await mysql2.createConnection(db);
 
   await db.start();
 
