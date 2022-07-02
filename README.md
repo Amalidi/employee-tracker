@@ -7,7 +7,6 @@
 - [Description](#description)
 - [User Story](#user-story)
 - [Getting Started](#getting-started)
-- [Project Screenshots](#project-screenshots)
 - [Questions](#questions)
 
 ## Description
