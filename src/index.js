@@ -60,10 +60,10 @@ const init = async () => {
         const employeeQuery = "SELECT * FROM employee";
         const employees = await executeQuery(employeeQuery);
 
-        const getDepartmentsList = employees.map((role) => ({
-          name: role.title,
-          value: role.id,
-          short: role.title,
+        const getDepartmentsList = employees.map((employee) => ({
+          name: employee.title,
+          value: employee.id,
+          short: employee.title,
         }));
 
         // function to allow users to select any role
@@ -76,25 +76,23 @@ const init = async () => {
         console.log("Employee has been added successfully");
       }
 
-      // update employees role
+      //update employee
       if (action === "updateEmployeeRole") {
-        const allEmployees = "SELECT * FROM employee";
-        // query data
-        const getEmployeeData = await db.query(allEmployees);
-        console.table(getEmployeeData);
+        //queries
+        const employee = await executeQuery("SELECT * FROM employee");
+        const role = await executeQuery("SELECT * FROM role");
 
-        // prompt update questions
-        const chosenRole = await inquirer.prompt(updateEmployeeRole);
+        const { id, role_id } = await inquirer.prompt(
+          updateEmployeeRole(employee, role)
+        );
 
-        // execute query for update selected employee role
-        const query = `UPDATE employee SET role_id = ('${chosenRole.role}') WHERE ID = ('${chosenRole.id}');`;
-        const data = await db.query(query);
+        const query = `UPDATE employee SET role_id = ${role_id} WHERE id = ${id}`;
+        const data = await executeQuery(query);
 
-        // execute query for update selected employee role
         const reselect = "SELECT * FROM employee";
-        const newData = await db.query(reselect);
+        const newData = await executeQuery(reselect);
         console.table(newData);
-
+        // console.table(data);
         console.log("Employee role has been successfully updated");
       }
 
@@ -112,11 +110,14 @@ const init = async () => {
         // query
         const getDepartments = "SELECT * FROM department";
         const allDepartments = await executeQuery(getDepartments);
-        // console.table(allDepartments);
+        console.table(allDepartments);
+
         const getDepartmentsList = allDepartments.map((department) => ({
           name: department.name,
           value: department.id,
         }));
+
+        // function to allow users to select any role
         const insertQuery = await inquirer.prompt(addRole(getDepartmentsList));
 
         // console.log(insertQuery);
@@ -124,10 +125,10 @@ const init = async () => {
         const query = `INSERT INTO role (title, salary, department_id) VALUES ('${insertQuery.title}', '${insertQuery.salary}', '${insertQuery.department_id}');`;
         const data = await executeQuery(query);
 
-        // const reselect = "SELECT * FROM role";
-        // const newData = await db.query(reselect);
+        const reselect = "SELECT * FROM role";
+        const newData = await executeQuery(reselect);
         console.table(data);
-        // console.log("New role has been successfully added");
+        console.log("New role has been successfully added");
       }
 
       // option to view all departments
@@ -159,6 +160,7 @@ const init = async () => {
         inProgress = false;
         await closeConnection();
         console.log("You have successfully exited the application");
+        process.exit(0);
       }
     }
   }

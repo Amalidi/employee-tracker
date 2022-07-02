@@ -73,6 +73,25 @@ const generateManagersChoices = (managers) => {
   });
 };
 
+// employee
+const showEmployeeChoices = (employeeFromDB) => {
+  return employeeFromDB.map((employee) => {
+    return {
+      name: employee.first_name + " " + employee.last_name,
+      value: employee.id,
+    };
+  });
+};
+
+const showRoleChoices = (rolesFromDB) => {
+  return rolesFromDB.map((role) => {
+    return {
+      name: role.title,
+      value: role.id,
+    };
+  });
+};
+
 // prompt the questions to add employee
 const generateEmployeeQuestions = (roles, employees) => {
   return [
@@ -121,16 +140,18 @@ const addRole = (departments) => [
 ];
 
 // update role questions
-const updateEmployeeRole = [
-  {
-    type: "input",
-    name: "role",
-    message: "Please select the employee you would like to update?",
-  },
+const updateEmployeeRole = (role, employee) => [
   {
     type: "input",
     name: "id",
+    message: "Please select the employee you would like to update?",
+    choices: showEmployeeChoices(employee),
+  },
+  {
+    type: "input",
+    name: "role_id",
     message: "Please input new role id for employee?",
+    choices: showRoleChoices(role),
   },
 ];
 
