@@ -135,7 +135,7 @@ const addRole = (departments) => [
     type: "list",
     name: "department_id",
     message: "Select department",
-    choices: departments,
+    choices: generateRoleChoices(departments),
   },
 ];
 
