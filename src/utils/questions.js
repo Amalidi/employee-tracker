@@ -142,13 +142,13 @@ const addRole = (departments) => [
 // update role questions
 const updateEmployeeRole = (role, employee) => [
   {
-    type: "input",
+    type: "list",
     name: "id",
     message: "Please select the employee you would like to update?",
     choices: showEmployeeChoices(employee),
   },
   {
-    type: "input",
+    type: "list",
     name: "role_id",
     message: "Please input new role id for employee?",
     choices: showRoleChoices(role),

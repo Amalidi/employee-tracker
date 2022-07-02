@@ -45,7 +45,8 @@ const init = async () => {
     } else {
       // the start
       if (action === "viewAllEmployees") {
-        const query = "SELECT * FROM employee";
+        const query = `SELECT E.ID, CONCAT(E.FIRST_NAME,' ',E.LAST_NAME) AS 'EMPLOYEE', R.SALARY, R.TITLE, D.NAME,CONCAT( M.FIRST_NAME,' ',
+        M.LAST_NAME) AS MANAGER FROM EMPLOYEE AS E JOIN EMPLOYEE AS M ON E.MANAGER_ID = M.ID INNER JOIN ROLE R ON E.ROLE_ID = R.ID LEFT JOIN DEPARTMENT D ON R.DEPARTMENT_ID = D.ID ;`;
         const data = await executeQuery(query);
         console.table(data);
       }
@@ -83,7 +84,7 @@ const init = async () => {
         const role = await executeQuery("SELECT * FROM role");
 
         const { id, role_id } = await inquirer.prompt(
-          updateEmployeeRole(employee, role)
+          updateEmployeeRole(role, employee)
         );
 
         const query = `UPDATE employee SET role_id = ${role_id} WHERE id = ${id}`;
@@ -92,7 +93,7 @@ const init = async () => {
         // const reselect = "SELECT * FROM employee";
         // const newData = await executeQuery(reselect);
         // console.table(newData);
-        console.table(data);
+        // console.table(data);
         console.log("Employee role has been successfully updated");
       }
 
