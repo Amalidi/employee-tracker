@@ -89,10 +89,10 @@ const init = async () => {
         const query = `UPDATE employee SET role_id = ${role_id} WHERE id = ${id}`;
         const data = await executeQuery(query);
 
-        const reselect = "SELECT * FROM employee";
-        const newData = await executeQuery(reselect);
-        console.table(newData);
-        // console.table(data);
+        // const reselect = "SELECT * FROM employee";
+        // const newData = await executeQuery(reselect);
+        // console.table(newData);
+        console.table(data);
         console.log("Employee role has been successfully updated");
       }
 
@@ -142,9 +142,9 @@ const init = async () => {
 
       // option to add a department
       if (action === "addDepartment") {
-        // const dp = "SELECT * FROM department";
-        // const newDepartment = await db.query(dp);
-        // console.table(newDepartment);
+        const dp = "SELECT * FROM department";
+        const newDepartment = await executeQuery(dp);
+        console.table(newDepartment);
 
         // prompt the question
         const insertQuery = await inquirer.prompt(addDepartment);
