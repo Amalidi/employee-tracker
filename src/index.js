@@ -142,9 +142,9 @@ const init = async () => {
 
       // option to add a department
       if (action === "addDepartment") {
-        const dp = "SELECT * FROM department";
-        const newDepartment = await executeQuery(dp);
-        console.table(newDepartment);
+        // const dp = "SELECT * FROM department";
+        // const newDepartment = await executeQuery(dp);
+        // console.table(newDepartment);
 
         // prompt the question
         const insertQuery = await inquirer.prompt(addDepartment);
@@ -155,7 +155,7 @@ const init = async () => {
         console.log("New department has been successfully added");
       }
 
-      // when exit is chosen break the while loop
+      // when exit is selected break the while loop
       if (action === "exit") {
         inProgress = false;
         await closeConnection();
