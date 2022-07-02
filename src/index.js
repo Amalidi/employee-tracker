@@ -118,7 +118,7 @@ const init = async () => {
         }));
 
         // function to allow users to select any role
-        const insertQuery = await inquirer.prompt(addRole(getDepartmentsList));
+        const insertQuery = await inquirer.prompt(addRole(allDepartments));
 
         // console.log(insertQuery);
 
